@@ -1,19 +1,19 @@
 terraform {
-    required_version = ">1.0"
+  required_version = ">= 1.0"
 
-    required_providers {
-        docker = {
-            source = "kreuzwerker/docker"
-            version = "~> 3.0"
-        }
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
     }
+  }
 }
 
 provider "docker" {}
 
 resource "docker_image" "nginx" {
-    name = "nginx:${var.image_tag}"
-} 
+  name = "nginx:${var.image_tag}"
+}
 
 resource "docker_container" "nginx" {
   name  = var.container_name

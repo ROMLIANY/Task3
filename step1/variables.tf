@@ -1,7 +1,7 @@
 variable "container_name" {
-    type      = srting
-    default   = "my-nginx"
-    description = "The name of the Nginx container"
+  type        = string
+  default     = "my-nginx"
+  description = "The name of the Nginx container"
 }
 
 variable "external_port" {
@@ -11,7 +11,7 @@ variable "external_port" {
 }
 
 variable "image_tag" {
-  type        = srting
+  type        = string
   default     = "latest"
   description = "Tag of the Nginx Docker image"
 }
