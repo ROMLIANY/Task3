@@ -9,3 +9,7 @@ variable "external_port" {
 variable "network_name" {
   type = string
 }
+
+variable "labels" {
+  type = map(string)
+}

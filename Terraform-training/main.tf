@@ -35,8 +35,15 @@ module "app" {
 module "web" {
   source         = "./modules/web"
   network_name   = docker_network.app_net.name
-  instance_count = var.instance_count
+  instance_count = local.web_count[local.env]
   external_port  = var.external_port_web
+
+  labels = merge(
+    local.common_labels,
+    {
+      tier = "web"
+    }
+  )
 
   depends_on = [module.app]
 }

@@ -26,4 +26,12 @@ resource "docker_container" "nginx" {
   networks_advanced {
     name = var.network_name
   }
+
+   dynamic "labels" {
+    for_each = var.labels
+    content {
+      label = labels.key
+      value = labels.value
+    }
+  } 
 }
