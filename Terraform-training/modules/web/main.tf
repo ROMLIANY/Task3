@@ -18,11 +18,6 @@ resource "docker_container" "nginx" {
   name  = "nginx-${count.index}"
   image = docker_image.nginx.name
 
-  ports {
-    internal = 80
-    external = var.external_port + count.index
-  }
-
   networks_advanced {
     name = var.network_name
   }
@@ -34,4 +29,13 @@ resource "docker_container" "nginx" {
       value = labels.value
     }
   } 
+
+dynamic "ports" {
+  for_each = var.ports
+  content {
+    internal = ports.value.internal
+    external = ports.value.external + count.index
+    protocol = ports.value.protocol
+  }
+ }
 }

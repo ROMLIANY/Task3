@@ -36,7 +36,7 @@ module "web" {
   source         = "./modules/web"
   network_name   = docker_network.app_net.name
   instance_count = local.web_count[local.env]
-  external_port  = var.external_port_web
+  ports          = local.web_ports[local.env]
 
   labels = merge(
     local.common_labels,

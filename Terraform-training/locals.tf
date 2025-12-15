@@ -24,4 +24,19 @@ locals {
     project      = "terraform-training"
     environment  = local.env
   }
+
+  web_ports = {
+    dev = [
+      { internal = 80, external = 8080, protocol = "tcp" }
+    ]
+
+    staging = [
+      { internal = 80, external = 8080, protocol = "tcp" }
+    ]
+
+    prod = [
+      { internal = 80, external = 8080, protocol = "tcp" },
+      { internal = 443, external = 8443, protocol = "tcp" }
+    ]
+  }
 }

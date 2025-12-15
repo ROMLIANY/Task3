@@ -49,10 +49,13 @@ APP
 EOF
   ]
 
-  healthcheck {
-    test     = ["CMD", "curl", "-f", "http://localhost:5000/"]
-    interval = "10s"
-    timeout  = "3s"
-    retries  = 5
-  }
+healthcheck {
+  test = [
+    "CMD-SHELL",
+    "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""
+  ]
+  interval = "10s"
+  timeout  = "3s"
+  retries  = 5
+}
 }
