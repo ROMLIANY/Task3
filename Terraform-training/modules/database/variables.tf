@@ -1,11 +1,12 @@
 variable "db_user" {
-  type = string
+  type    = string
 }
 
 variable "db_password" {
-  type = string
+  type    = string
+  sensitive = true
 }
 
 variable "network_name" {
-  type = string
+  type    = string
 }

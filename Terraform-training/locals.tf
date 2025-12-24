@@ -1,6 +1,9 @@
 locals {
   env = terraform.workspace
 
+  network_name = docker_network.app_net.name
+
+
   web_count = {
     dev     = 1
     staging = 2
@@ -13,30 +16,39 @@ locals {
     prod    = 3
   }
 
-  db_count = {
-    dev     = 1
-    staging = 1
-    prod    = 1
-  }
-
-  common_labels  = {
-    managed_by   = "terraform"
-    project      = "terraform-training"
-    environment  = local.env
+  common_labels = {
+    managed_by  = "terraform"
+    project     = "terraform-training"
+    environment = local.env
   }
 
   web_ports = {
     dev = [
       { internal = 80, external = 8080, protocol = "tcp" }
     ]
-
     staging = [
       { internal = 80, external = 8080, protocol = "tcp" }
     ]
-
     prod = [
       { internal = 80, external = 8080, protocol = "tcp" },
       { internal = 443, external = 8443, protocol = "tcp" }
     ]
+  }
+
+  app_ports = [for i in range(var.instance_count) : var.external_port + i]
+
+  app_env_vars = {
+    dev = {
+      LOG_LEVEL = "debug"
+      DEBUG     = "true"
+    }
+    staging = {
+      LOG_LEVEL = "info"
+      DEBUG     = "false"
+    }
+    prod = {
+      LOG_LEVEL = "warn"
+      DEBUG     = "false"
+    }
   }
 }

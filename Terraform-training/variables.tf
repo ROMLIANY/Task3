@@ -4,13 +4,12 @@ variable "network_name" {
 }
 
 variable "db_user" {
-  type    = string
-  default = "root"
+  type = string
 }
 
 variable "db_password" {
-  type    = string
-  default = "password123"
+  type      = string
+  sensitive = true
 }
 
 variable "external_port" {

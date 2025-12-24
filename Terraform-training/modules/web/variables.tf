@@ -1,13 +1,15 @@
 variable "instance_count" {
-  type = number
+  type    = number
+  default = 1
 }
 
 variable "network_name" {
-  type = string
+  type    = string
 }
 
 variable "labels" {
-  type = map(string)
+  type    = map(string)
+  default = {}
 }
 
 variable "ports" {
@@ -17,4 +19,10 @@ variable "ports" {
     external = number
     protocol = string
   }))
+}
+
+# New variable for container base name
+variable "container_base_name" {
+  type    = string
+  default = "nginx"
 }

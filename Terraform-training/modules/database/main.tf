@@ -22,6 +22,7 @@ resource "docker_container" "mysql" {
 
   env = [
     "MYSQL_ROOT_PASSWORD=${var.db_password}",
+    "MYSQL_DATABASE=appdb",
     "MYSQL_USER=${var.db_user}",
     "MYSQL_PASSWORD=${var.db_password}"
   ]
@@ -34,4 +35,5 @@ resource "docker_container" "mysql" {
     volume_name    = docker_volume.mysql_data.name
     container_path = "/var/lib/mysql"
   }
+  restart = "unless-stopped"
 }
