@@ -35,5 +35,11 @@ resource "docker_container" "mysql" {
     volume_name    = docker_volume.mysql_data.name
     container_path = "/var/lib/mysql"
   }
+
   restart = "unless-stopped"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
+
