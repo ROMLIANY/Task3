@@ -36,3 +36,12 @@ variable "external_port" {
     error_message = "external_port must be between 1024 and 65535."
   }
 }
+
+variable "active_color" {
+  type    = string
+  default = "blue"
+  validation {
+    condition     = contains(["blue", "green"], var.active_color)
+    error_message = "active_color must be 'blue' or 'green'."
+  }
+}

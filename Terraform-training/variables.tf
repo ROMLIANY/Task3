@@ -31,3 +31,13 @@ variable "app_version" {
   type = string
   default = "v1"
 }
+
+variable "active_color" {
+  type    = string
+  default = "blue"              # choose color, green or blue
+  validation {
+    condition     = contains(["blue", "green"], var.active_color)
+    error_message = "active_color must be 'blue' or 'green'."
+  }
+
+}
