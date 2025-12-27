@@ -26,3 +26,8 @@ variable "instance_count" {
   type    = number
   default = 2
 }
+
+variable "app_version" {
+  type = string
+  default = "v1"
+}

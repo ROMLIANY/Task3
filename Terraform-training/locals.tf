@@ -3,7 +3,6 @@ locals {
 
   network_name = docker_network.app_net.name
 
-
   web_count = {
     dev     = 1
     staging = 2
@@ -35,8 +34,6 @@ locals {
     ]
   }
 
-  app_ports = [for i in range(var.instance_count) : var.external_port + i]
-
   app_env_vars = {
     dev = {
       LOG_LEVEL = "debug"
@@ -50,5 +47,18 @@ locals {
       LOG_LEVEL = "warn"
       DEBUG     = "false"
     }
+  }
+
+  # השאר רק את ההגדרה הזו
+  app_ports = {
+    dev     = [8082, 8083]
+    staging = [8082, 8083]
+    prod    = [8082, 8083, 8084]
+  }
+
+  app_primary_port = {
+    dev     = local.app_ports.dev[0]
+    staging = local.app_ports.staging[0]
+    prod    = local.app_ports.prod[0]
   }
 }

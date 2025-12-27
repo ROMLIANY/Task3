@@ -50,3 +50,14 @@ module "web" {
 
   depends_on = [module.app]
 }
+resource "null_resource" "app_healthcheck" {
+  triggers = {
+    app_version = var.app_version
+  }
+
+  provisioner "local-exec" {
+    command = "curl -f http://localhost:${local.app_primary_port[local.env]} || exit 1"
+  }
+
+  depends_on = [module.app]
+}
