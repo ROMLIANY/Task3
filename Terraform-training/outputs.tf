@@ -3,6 +3,12 @@ output "db_ip" {
   value = module.database.mysql_ip
 }
 
+# Sensitive output for DB password
+output "db_password" {
+  value     = var.db_password
+  sensitive = true
+}
+
 # App outputs
 output "app_ips" {
   value = module.app.flask_ips

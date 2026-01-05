@@ -39,7 +39,7 @@ variable "external_port" {
 
 variable "active_color" {
   type    = string
-  default = "blue"
+  default = "green"
   validation {
     condition     = contains(["blue", "green"], var.active_color)
     error_message = "active_color must be 'blue' or 'green'."

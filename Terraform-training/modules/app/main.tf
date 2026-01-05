@@ -37,48 +37,28 @@ resource "docker_container" "flask_blue" {
     "-c",
     <<EOF
 pip install flask mysql-connector-python && python - <<APP
-from flask import Flask
-import os
-import time
-import mysql.connector
-
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_NAME = "appdb"
-
-for i in range(10):
-    try:
-        conn = mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-        conn.close()
-        break
-    except Exception:
-        time.sleep(3)
-
-app = Flask(__name__)
-
-@app.route("/")
-def index():
-    return "Flask OK + MySQL Connected"
-
-app.run(host="0.0.0.0", port=5000)
+# ... קוד Flask ...
 APP
 EOF
   ]
 
   healthcheck {
-    test = [
-      "CMD-SHELL",
-      "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""
-    ]
+    test     = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""]
     interval = "10s"
     timeout  = "3s"
     retries  = 5
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.instance_count > 0
+      error_message = "instance_count חייב להיות גדול מ-0"
+    }
+
+    postcondition {
+      condition     = self.ports[0].external >= 1024 && self.ports[0].external <= 65535
+      error_message = "הפורט חייב להיות בטווח 1024–65535"
+    }
   }
 }
 
@@ -99,55 +79,49 @@ resource "docker_container" "flask_green" {
 
   ports {
     internal = 5000
-    external = var.external_port + count.index + 10   # שינוי כדי לא להתנגש עם blue
+    external = var.external_port + count.index + 10
   }
 
-  command = [
-    "sh",
-    "-c",
-    <<EOF
-pip install flask mysql-connector-python && python - <<APP
+command = [
+  "sh",
+  "-c",
+  <<EOF
+pip install flask mysql-connector-python &&
+python - <<'APP'
 from flask import Flask
 import os
-import time
 import mysql.connector
-
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_NAME = "appdb"
-
-for i in range(10):
-    try:
-        conn = mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-        conn.close()
-        break
-    except Exception:
-        time.sleep(3)
+import time
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Flask OK + MySQL Connected"
+    return "Flask app is running!"
 
 app.run(host="0.0.0.0", port=5000)
 APP
 EOF
-  ]
+]
+
+
 
   healthcheck {
-    test = [
-      "CMD-SHELL",
-      "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""
-    ]
+    test     = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""]
     interval = "10s"
     timeout  = "3s"
     retries  = 5
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.instance_count > 0
+      error_message = "instance_count חייב להיות גדול מ-0"
+    }
+
+    postcondition {
+      condition     = self.ports[0].external >= 1024 && self.ports[0].external <= 65535
+      error_message = "הפורט חייב להיות בטווח 1024–65535"
+    }
   }
 }
